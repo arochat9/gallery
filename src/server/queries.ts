@@ -13,3 +13,23 @@ export async function getMyImages() {
     });
   });
 }
+
+export async function getImage(id: number) {
+  return auth().then((user) => {
+    if (!user.userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return db.query.images
+      .findFirst({ where: (model, { eq }) => eq(model.id, id) })
+      .then((image) => {
+        if (!image) {
+          throw new Error("Not found");
+        }
+        if (image.userId !== user.userId) {
+          throw new Error("Unauthorized");
+        }
+        return image;
+      });
+  });
+}

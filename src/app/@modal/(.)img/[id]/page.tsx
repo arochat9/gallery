@@ -1,7 +1,11 @@
-export default function PhotoModal({
-  params: { id: photoId },
+// "use client";
+// import { Modal } from "./modal";
+
+export default async function PhotoModal({
+  params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const photoId = (await params).id;
   return <div>{photoId}</div>;
 }
