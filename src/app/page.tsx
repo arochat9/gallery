@@ -6,9 +6,10 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 async function Images() {
-  const images = await getMyImages();
+  let images = await getMyImages();
+  images = [...images, ...images, ...images, ...images, ...images, ...images];
   return (
-    <div className="flex flex-wrap justify-center gap-4">
+    <div className="flex flex-wrap justify-center gap-4 pt-4">
       {images.map((image) => (
         <div key={image.id} className="flex w-48 flex-col">
           <Link href={`/img/${image.id}`} passHref>
