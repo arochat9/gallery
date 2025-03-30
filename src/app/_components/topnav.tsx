@@ -5,19 +5,19 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import UploadButton from "./uploadButton";
+import SimpleUploadButton from "./simple-upload-button";
 
 export function TopNav() {
   return (
     <nav className="flex w-full items-center justify-between border-b bg-blue-500 p-4 text-xl font-semibold">
       <div>Gallery</div>
 
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center gap-4">
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UploadButton endpoint="imageUploader" />
+          <SimpleUploadButton />
           <UserButton />
         </SignedIn>
       </div>
