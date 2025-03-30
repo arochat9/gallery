@@ -97,22 +97,6 @@ export default function SimpleUploadButton() {
       <label htmlFor="upload-button" className="cursor-pointer">
         <UploadSvg />
       </label>
-      <button
-        onClick={() => {
-          toast(
-            <div className="flex flex-row items-center gap-2">
-              <LoadingSpinnerSvg />
-              Uploading...
-            </div>,
-            {
-              duration: 100000,
-              id: "uploading-toast",
-            },
-          );
-        }}
-      >
-        test toast
-      </button>
       <input
         id="upload-button"
         type="file"
