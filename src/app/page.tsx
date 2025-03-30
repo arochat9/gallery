@@ -7,7 +7,6 @@ export const dynamic = "force-dynamic";
 
 async function Images() {
   let images = await getMyImages();
-  images = [...images, ...images, ...images, ...images, ...images, ...images];
   return (
     <div className="flex flex-wrap justify-center gap-4 pt-4">
       {images.map((image) => (

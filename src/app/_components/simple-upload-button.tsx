@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "~/utils/uploadthing";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 // inferred input off useUploadThing
 type Input = Parameters<typeof useUploadThing>;
@@ -47,10 +49,47 @@ function UploadSvg() {
   );
 }
 
+function LoadingSpinnerSvg() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+        opacity=".25"
+      />
+      <path
+        d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z"
+        className="spinner_ajPY"
+      />
+    </svg>
+  );
+}
+
 export default function SimpleUploadButton() {
   const router = useRouter();
+
   const { inputProps } = useUploadThingInputProps("imageUploader", {
+    onUploadBegin: () => {
+      toast(
+        <div className="flex flex-row items-center gap-2">
+          <LoadingSpinnerSvg />
+          Uploading...
+        </div>,
+        {
+          duration: 100000,
+          id: "uploading-toast",
+        },
+      );
+    },
     onClientUploadComplete: () => {
+      toast.dismiss("uploading-toast");
+      toast("Upload Completed", {
+        duration: 3000,
+      });
       router.refresh();
     },
   });
@@ -59,6 +98,22 @@ export default function SimpleUploadButton() {
       <label htmlFor="upload-button" className="cursor-pointer">
         <UploadSvg />
       </label>
+      <button
+        onClick={() => {
+          toast(
+            <div className="flex flex-row items-center gap-2">
+              <LoadingSpinnerSvg />
+              Uploading...
+            </div>,
+            {
+              duration: 100000,
+              id: "uploading-toast",
+            },
+          );
+        }}
+      >
+        test toast
+      </button>
       <input
         id="upload-button"
         type="file"
@@ -68,38 +123,3 @@ export default function SimpleUploadButton() {
     </div>
   );
 }
-
-// type endpointArg = EndpointArg<
-//   {
-//     imageUploader: FileRoute<{
-//       input: undefined;
-//       output: {
-//         uploadedBy: string;
-//       };
-//       errorShape: JSON;
-//     }>;
-//   },
-//   "imageUploader"
-// >;
-
-// export default function Home(props: { endpoint: endpointArg }) {
-//   const router = useRouter();
-
-//   return (
-//     <main>
-//       <UploadButton
-//         endpoint={props.endpoint}
-//         onClientUploadComplete={(res) => {
-//           // Do something with the response
-//           //   console.log("Files: ", res);
-//           //   alert("Upload Completed");
-//           router.refresh();
-//         }}
-//         onUploadError={(error: Error) => {
-//           // Do something with the error.
-//           alert(`ERROR! ${error.message}`);
-//         }}
-//       />
-//     </main>
-//   );
-// }
