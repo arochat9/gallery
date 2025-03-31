@@ -5,6 +5,7 @@ import { images } from "./db/schema";
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { redirect, RedirectType } from "next/navigation";
+import analyticsServerClient from "./analytics";
 
 export async function getMyImages() {
   return auth().then((user) => {
@@ -49,6 +50,12 @@ export async function deleteImage(id: number) {
     .delete(images)
     .where(and(eq(images.id, id), eq(images.userId, user.userId)));
 
-  // revalidatePath("/");
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "user deleted image",
+    properties: {
+      imageId: id,
+    },
+  });
   redirect("/");
 }
